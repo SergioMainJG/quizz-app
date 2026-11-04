@@ -1,0 +1,26 @@
+# syntax=docker/dockerfile:1
+ARG BUN_VERSION=1.4.3
+
+FROM docker.io/oven/bun:${BUN_VERSION}-slim AS build
+WORKDIR /app
+COPY package.json bun.lock* ./
+RUN bun install --frozen-lockfile
+COPY . .
+RUN bun run build
+
+FROM docker.io/oven/bun:${BUN_VERSION}-slim AS prod-deps
+WORKDIR /app
+COPY package.json bun.lock* ./
+RUN bun install --frozen-lockfile --production --ignore-scripts
+
+FROM docker.io/oven/bun:1.4.3-slim AS runtime
+RUN groupadd --system app && useradd --system --gid app app
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=prod-deps --chown=app:app /app/node_modules ./node_modules
+COPY --from=build --chown=app:app /app/dist ./dist
+COPY --chown=app:app package.json ./
+COPY --chown=app:app drizzle ./drizzle
+USER app
+EXPOSE 3000
+CMD ["bun", "dist/main.js"]

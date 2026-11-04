@@ -1,0 +1,15 @@
+[Unit]
+Description=Application
+Requires=app-build.service db.service cache.service
+After=app-build.service db.service cache.service
+
+[Kube]
+Yaml=app.yaml
+Network=host
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target

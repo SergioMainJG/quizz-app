@@ -1,0 +1,23 @@
+# compiled output
+/dist
+/build
+/node_modules
+
+# logs
+logs
+*.log
+
+# tests
+/coverage
+
+# editors and OS
+.DS_Store
+/.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# environment (template.env is the committed reference; see scripts/secrets.ts)
+.env
+.env.*
+/.secrets

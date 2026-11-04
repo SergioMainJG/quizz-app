@@ -1,0 +1,13 @@
+[Unit]
+Description=Database
+
+[Kube]
+Yaml=db.yaml
+Network=host
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target

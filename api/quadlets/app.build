@@ -1,0 +1,7 @@
+[Build]
+ImageTag=localhost/api:latest
+File=__PROJECT_DIR__/Containerfile
+SetWorkingDirectory=__PROJECT_DIR__
+
+[Service]
+TimeoutStartSec=1800
