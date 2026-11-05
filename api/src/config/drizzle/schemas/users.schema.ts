@@ -1,33 +1,29 @@
-import { pgTable } from "drizzle-orm/pg-core/table";
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-orm/arktype";
-import { uuid, varchar, check, pgEnum, timestamp } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-orm/arktype";
+import { check, pgEnum, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { pgTable } from "drizzle-orm/pg-core/table";
 
-export const userRoles = pgEnum('UserRoles', ['PLAYER', 'ADMIN']);
+export const userRoles = pgEnum("UserRoles", ["PLAYER", "ADMIN"]);
 
 export const users = pgTable(
-  'users',
+  "users",
   {
-    id: uuid('id').defaultRandom().primaryKey().notNull(),
-    username: varchar('username').unique().notNull(),
-    email: varchar('email').unique().notNull(),
-    password: varchar('password').notNull(),
-    role: userRoles('role').notNull(),
-    createdAt: timestamp('createdAt').defaultNow().notNull(),
+    id: uuid("id").defaultRandom().primaryKey().notNull(),
+    username: varchar("username").unique().notNull(),
+    email: varchar("email").unique().notNull(),
+    password: varchar("password").notNull(),
+    role: userRoles("role").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
   },
-  (table) =>[
-    check('email_check', sql`${table.email}~* '^[A-Za-z0-9._+%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'`)
-  ]
+  (table) => [
+    check("email_check", sql`${table.email}~* '^[A-Za-z0-9._+%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'`),
+  ],
 );
 
-export const [
-  usersSelectSchema,
-  usersInsertSchema,
-  usersUpdateSchema,
-] = [
+export const [usersSelectSchema, usersInsertSchema, usersUpdateSchema] = [
   createSelectSchema(users),
   createInsertSchema(users),
-  createUpdateSchema(users)
+  createUpdateSchema(users),
 ];
 
 export type UsersSelectSchema = typeof usersSelectSchema.infer;
