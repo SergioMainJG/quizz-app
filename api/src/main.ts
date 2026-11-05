@@ -1,12 +1,10 @@
-import type { Envs } from "./config/envs.schema.js";
-import type { NestBunApplication } from "nestjs-platform-bun";
-
 import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import { Logger as PinoLogger } from "nestjs-pino";
-
+import type { NestBunApplication } from "nestjs-platform-bun";
 import { AppModule } from "./app.module.js";
+import type { Envs } from "./config/envs.schema.js";
 import { configureApplication, createAdapter } from "./main.setup.js";
 
 const app = await NestFactory.create<NestBunApplication>(AppModule, createAdapter(), {
