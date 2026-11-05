@@ -10,7 +10,6 @@ export const envsSchema = type({
   PORT: numericEnv.to("1 <= number.integer <= 65535"),
   DATABASE_URL: "string.url",
   CACHE_TTL: numericEnv.to("number.integer >= 0"),
-  CACHE_URL: "string.url",
   "LOG_LEVEL?": "'fatal' | 'error' | 'warn' | 'info' | 'debug' | 'trace'",
   DOMAIN_ORIGIN: "string.url",
   "SMTP_URL?": "string.url",
