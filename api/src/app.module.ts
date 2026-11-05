@@ -10,8 +10,6 @@ import { LoggerModule } from "nestjs-pino";
 import { AuthModule } from "./auth/auth.module.js";
 
 import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter.js";
-import { HashingModule } from "./common/hashing/hashing.module.js";
-import { SecurityHeadersInterceptor } from "./common/security/security-headers.interceptor.js";
 import { DrizzleConfigService } from "./config/drizzle/drizzle-config.service.js";
 import type { Envs } from "./config/envs.schema.js";
 import { validateEnv } from "./config/envs.schema.js";
@@ -29,7 +27,6 @@ import { UsersModule } from "./users/users.module.js";
       validate: validateEnv,
     }),
     DrizzleModule.forRootAsync({ useClass: DrizzleConfigService }),
-    HashingModule,
     CacheModule.registerAsync({
       isGlobal: true,
       inject: [ConfigService],
@@ -75,7 +72,6 @@ import { UsersModule } from "./users/users.module.js";
   ],
   providers: [
     { provide: APP_FILTER, useClass: AllExceptionsFilter },
-    { provide: APP_INTERCEPTOR, useClass: SecurityHeadersInterceptor },
     { provide: APP_INTERCEPTOR, useClass: CacheInterceptor },
     { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],
