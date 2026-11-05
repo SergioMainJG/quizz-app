@@ -1,1 +1,0 @@
-CREATE TYPE "UserRoles" AS ENUM('PLAYER', 'ADMIN');

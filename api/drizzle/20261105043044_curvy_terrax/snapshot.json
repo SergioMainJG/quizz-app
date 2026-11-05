@@ -2,11 +2,28 @@
   "type": "base",
   "version": "9",
   "dialect": "postgres",
-  "id": "b7e2002e-724a-4116-8fd7-615f289b61fa",
+  "id": "b72bc851-3d57-446a-9684-c40757cfe36d",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
   "footprints": [
+    {
+      "statementType": "create_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "UserRoles"
+      ],
+      "writes": [
+        "s|enum|public.UserRoles",
+        "n|enum|public.UserRoles",
+        "e|enum|public.UserRoles",
+        "n|type|public.UserRoles"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
     {
       "statementType": "create_table",
       "statementTarget": [
@@ -36,6 +53,15 @@
       "name": "users",
       "isRlsEnabled": false,
       "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "UserRoles",
+      "values": [
+        "PLAYER",
+        "ADMIN"
+      ],
+      "entityType": "enums"
     },
     {
       "schema": "public",
@@ -69,7 +95,7 @@
       "name": "email",
       "type": "varchar",
       "typeSchema": null,
-      "notNull": false,
+      "notNull": true,
       "dimensions": 0,
       "default": null,
       "generated": null,
@@ -82,7 +108,7 @@
       "name": "password",
       "type": "varchar",
       "typeSchema": null,
-      "notNull": false,
+      "notNull": true,
       "dimensions": 0,
       "default": null,
       "generated": null,
@@ -95,7 +121,7 @@
       "name": "role",
       "type": "UserRoles",
       "typeSchema": "public",
-      "notNull": false,
+      "notNull": true,
       "dimensions": 0,
       "default": null,
       "generated": null,
@@ -108,7 +134,7 @@
       "name": "createdAt",
       "type": "timestamp",
       "typeSchema": null,
-      "notNull": false,
+      "notNull": true,
       "dimensions": 0,
       "default": "now()",
       "generated": null,
