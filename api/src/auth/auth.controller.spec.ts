@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { User } from "../users/entity/user.entity.js";
 import { AuthController } from "./auth.controller.js";
 import { CredentialsService } from "./credentials.service.js";
-import type { SignUpSchemaDto } from "./schema/sign-up.schema.js";
+import { SignUpSchemaDto } from "./schema/sign-up.schema.js";
 
 const user: User = {
   id: "5f1c6a3e-8a9b-4c2d-9e7f-1a2b3c4d5e6f",
@@ -26,7 +26,14 @@ const signInBody = { email: signUpBody.email, password: signUpBody.password };
 const issuedSession = (mfa?: MfaState): IssuedSession => {
   const now = new Date();
   return {
-    session: { id: "session-id", userId: user.id, createdAt: now, expiresAt: now, lastActiveAt: now, mfa },
+    session: {
+      id: "session-id",
+      userId: user.id,
+      createdAt: now,
+      expiresAt: now,
+      lastActiveAt: now,
+      mfa,
+    },
     token: "token",
     cookie: "__Host-sid=token",
   };
@@ -69,6 +76,16 @@ describe("AuthController", () => {
       expect(signInService.signIn).toHaveBeenCalledWith(user.id, { method: "password" });
     });
 
+    it("never returns the password hash, even if the service includes it", async () => {
+      credentialsService.register.mockResolvedValue({ ...user, password: "$scrypt$hash" } as User);
+      signInService.signIn.mockResolvedValue(issuedSession());
+
+      const response = await controller.signUp(signUpBody);
+
+      expect(response).toEqual(user);
+      expect(response).not.toHaveProperty("password");
+    });
+
     it("passes only username, email and password to the service", async () => {
       credentialsService.register.mockResolvedValue(user);
       signInService.signIn.mockResolvedValue(issuedSession());
@@ -79,7 +96,9 @@ describe("AuthController", () => {
     });
 
     it("does not sign in when registration fails", async () => {
-      credentialsService.register.mockRejectedValue(new ConflictException("Email already registered"));
+      credentialsService.register.mockRejectedValue(
+        new ConflictException("Email already registered"),
+      );
 
       await expect(controller.signUp(signUpBody)).rejects.toThrow(ConflictException);
       expect(signInService.signIn).not.toHaveBeenCalled();
