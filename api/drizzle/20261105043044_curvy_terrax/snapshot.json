@@ -3,34 +3,22 @@
   "version": "9",
   "dialect": "postgres",
   "id": "b72bc851-3d57-446a-9684-c40757cfe36d",
-  "prevIds": [
-    "00000000-0000-0000-0000-000000000000"
-  ],
+  "prevIds": ["00000000-0000-0000-0000-000000000000"],
   "footprints": [
     {
       "statementType": "create_enum",
-      "statementTarget": [
-        "enum",
-        "public",
-        "UserRoles"
-      ],
+      "statementTarget": ["enum", "public", "UserRoles"],
       "writes": [
         "s|enum|public.UserRoles",
         "n|enum|public.UserRoles",
         "e|enum|public.UserRoles",
         "n|type|public.UserRoles"
       ],
-      "reads": [
-        "n|sch|public"
-      ]
+      "reads": ["n|sch|public"]
     },
     {
       "statementType": "create_table",
-      "statementTarget": [
-        "table",
-        "public",
-        "users"
-      ],
+      "statementTarget": ["table", "public", "users"],
       "writes": [
         "s|tbl|public.users",
         "n|tbl|public.users",
@@ -41,10 +29,7 @@
         "n|rel|public.users_username_key",
         "n|rel|public.users_email_key"
       ],
-      "reads": [
-        "n|sch|public",
-        "n|enum|public.UserRoles"
-      ]
+      "reads": ["n|sch|public", "n|enum|public.UserRoles"]
     }
   ],
   "ddl": [
@@ -57,10 +42,7 @@
     {
       "schema": "public",
       "name": "UserRoles",
-      "values": [
-        "PLAYER",
-        "ADMIN"
-      ],
+      "values": ["PLAYER", "ADMIN"],
       "entityType": "enums"
     },
     {
@@ -145,9 +127,7 @@
       "schema": "public",
       "table": "users",
       "name": "users_pkey",
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "entityType": "pks"
     },
@@ -156,9 +136,7 @@
       "table": "users",
       "name": "users_username_key",
       "nameExplicit": false,
-      "columns": [
-        "username"
-      ],
+      "columns": ["username"],
       "nullsNotDistinct": false,
       "entityType": "uniques"
     },
@@ -167,9 +145,7 @@
       "table": "users",
       "name": "users_email_key",
       "nameExplicit": false,
-      "columns": [
-        "email"
-      ],
+      "columns": ["email"],
       "nullsNotDistinct": false,
       "entityType": "uniques"
     },
