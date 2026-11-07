@@ -88,7 +88,9 @@ describe("CredentialsService", () => {
     it("returns null when the password is wrong", async () => {
       usersRepository.findByEmail.mockResolvedValue({ ...user, password: storedHash });
 
-      await expect(service.verify({ email: user.email, password: "wrong password" })).resolves.toBeNull();
+      await expect(
+        service.verify({ email: user.email, password: "wrong password" }),
+      ).resolves.toBeNull();
       expect(usersRepository.updatePasswordHash).not.toHaveBeenCalled();
     });
 

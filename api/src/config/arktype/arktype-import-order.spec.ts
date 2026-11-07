@@ -11,7 +11,12 @@ describe("schemas don't depend on when the global ArkType config is loaded", () 
 
   it("still strips undeclared keys", () => {
     expect(
-      signUpSchema({ username: "janeDoe0003", email: "a@b.co", password: "correct horse battery staple", role: "ADMIN" }),
+      signUpSchema({
+        username: "janeDoe0003",
+        email: "a@b.co",
+        password: "correct horse battery staple",
+        role: "ADMIN",
+      }),
     ).not.toHaveProperty("role");
     expect(
       userResponseSchema.assert({

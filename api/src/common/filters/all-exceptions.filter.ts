@@ -10,7 +10,11 @@ export interface ErrorResponseBody {
   path: string;
   statusCode: number;
   timestamp: string;
+  /** Anything else a client error carries, such as the field `errors` of a validation failure. */
+  [detail: string]: unknown;
 }
+
+type ExceptionResponse = Record<string, unknown> & { error?: string; message?: string | string[] };
 
 interface RequestLike {
   headers?: Record<string, string | string[] | undefined>;
@@ -27,17 +31,26 @@ const toReasonPhrase = (status: number): string | undefined =>
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
-const toBody = (exception: unknown): Pick<ErrorResponseBody, "error" | "message"> => {
+type BodyFromException = Pick<ErrorResponseBody, "error" | "message"> & Record<string, unknown>;
+
+const toBody = (exception: unknown): BodyFromException => {
   if (!(exception instanceof HttpException)) {
     return { error: "Internal Server Error", message: "Internal server error" };
   }
-  const reason = toReasonPhrase(exception.getStatus()) ?? exception.name;
+  const status = exception.getStatus();
+  const reason = toReasonPhrase(status) ?? exception.name;
   const response = exception.getResponse();
   if (typeof response === "string") {
     return { error: reason, message: response };
   }
-  const { error, message } = response as { error?: string; message?: string | string[] };
-  return { error: error ?? reason, message: message ?? exception.message };
+  const { error, message, ...details } = response as ExceptionResponse;
+  return {
+    // Client errors keep their extra fields (the validation `errors`, for one); a server
+    // error's details stay out of the response.
+    ...(status < 500 ? details : {}),
+    error: error ?? reason,
+    message: message ?? exception.message,
+  };
 };
 
 const correlationIdOf = (request: RequestLike): string => {
@@ -46,7 +59,8 @@ const correlationIdOf = (request: RequestLike): string => {
 };
 
 /**
- * Every HTTP error leaves as { statusCode, error, message, path, timestamp, correlationId }.
+ * Every HTTP error leaves as { statusCode, error, message, path, timestamp, correlationId },
+ * plus the extra fields of a 4xx exception (such as the validation `errors`).
  * It uses the HttpAdapterHost, so it works with any HTTP adapter.
  */
 @Catch()

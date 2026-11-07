@@ -1,4 +1,4 @@
-import { AuthenticationModule } from '@nestjs/authentication';
+import { AuthenticationModule } from "@nestjs/authentication";
 import { CacheInterceptor, CacheModule } from "@nestjs/cache-manager";
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
@@ -64,9 +64,9 @@ import { UsersModule } from "./users/users.module.js";
     AuthModule,
     AuthenticationModule.forRoot({
       session: {
-        absoluteTtl: '14d',
-        idleTtl: '3d',
-      }
+        absoluteTtl: "14d",
+        idleTtl: "3d",
+      },
     }),
     UsersModule,
   ],

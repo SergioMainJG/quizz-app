@@ -26,10 +26,7 @@ export const configureApplication = (
     origin: config.get("DOMAIN_ORIGIN", { infer: true }),
   });
 
-  const document = createOpenApiDocument(
-    app,
-    config.get("APP_NAME", { infer: true }),
-  );
+  const document = createOpenApiDocument(app, config.get("APP_NAME", { infer: true }));
   app.use("/reference", apiReference({ content: document }));
   app.useSecurityHeaders();
   app.useWebSocketAdapter(new BunIoAdapter(app));

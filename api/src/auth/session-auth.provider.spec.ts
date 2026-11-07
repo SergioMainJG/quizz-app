@@ -21,7 +21,9 @@ const sessionFor = (userId: string): SessionRecord => {
 describe("SessionAuth", () => {
   let provider: SessionAuth;
   let usersRepository: { findById: ReturnType<typeof vi.fn<UsersRepository["findById"]>> };
-  let registry: { registerProvider: ReturnType<typeof vi.fn<AuthenticationRegistry["registerProvider"]>> };
+  let registry: {
+    registerProvider: ReturnType<typeof vi.fn<AuthenticationRegistry["registerProvider"]>>;
+  };
 
   beforeEach(async () => {
     usersRepository = { findById: vi.fn<UsersRepository["findById"]>() };

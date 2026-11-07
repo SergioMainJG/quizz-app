@@ -3,6 +3,7 @@ import type { INestApplication } from "@nestjs/common";
 import type { OpenAPIObject } from "@nestjs/swagger";
 import { Test } from "@nestjs/testing";
 import { type } from "arktype";
+import { BunAdapter } from "nestjs-platform-bun";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { AuthModule } from "../../auth/auth.module.js";
 import { UsersRepository } from "../../users/users.repository.js";
@@ -11,12 +12,16 @@ import { arkTypeSchemaConverter, createOpenApiDocument } from "./openapi.js";
 const ref = (name: string) => ({ $ref: `#/components/schemas/${name}` });
 
 const jsonBody = (operation: { requestBody?: unknown } | undefined) =>
-  (operation?.requestBody as { content: { "application/json": { schema: unknown } } }).content["application/json"].schema;
-
-const responseBody = (operation: { responses?: Record<string, unknown> } | undefined, status: string) =>
-  (operation?.responses?.[status] as { content: { "application/json": { schema: unknown } } }).content[
+  (operation?.requestBody as { content: { "application/json": { schema: unknown } } }).content[
     "application/json"
   ].schema;
+
+const responseBody = (
+  operation: { responses?: Record<string, unknown> } | undefined,
+  status: string,
+) =>
+  (operation?.responses?.[status] as { content: { "application/json": { schema: unknown } } })
+    .content["application/json"].schema;
 
 describe("OpenAPI document", () => {
   let app: INestApplication;
@@ -24,21 +29,30 @@ describe("OpenAPI document", () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AuthenticationModule.forRoot({ session: { absoluteTtl: "14d", idleTtl: "3d" } }), AuthModule],
+      imports: [
+        AuthenticationModule.forRoot({ session: { absoluteTtl: "14d", idleTtl: "3d" } }),
+        AuthModule,
+      ],
     })
       .overrideProvider(UsersRepository)
       .useValue({})
       .compile();
-    app = moduleRef.createNestApplication();
+    // The app's own HTTP adapter: without one, Nest falls back to @nestjs/platform-express.
+    app = moduleRef.createNestApplication(new BunAdapter());
     app.setGlobalPrefix("api");
     document = createOpenApiDocument(app, "Test");
   });
 
-  afterAll(() => app.close());
+  afterAll(async () => {
+    await app?.close();
+  });
 
   it("uses OpenAPI 3.1 and documents the session cookie", () => {
     expect(document.openapi).toBe("3.1.0");
-    expect(document.components?.securitySchemes?.cookie).toMatchObject({ in: "cookie", name: "__Host-sid" });
+    expect(document.components?.securitySchemes?.cookie).toMatchObject({
+      in: "cookie",
+      name: "__Host-sid",
+    });
   });
 
   it("documents sign-up with named request, response and error schemas", () => {
@@ -67,7 +81,9 @@ describe("OpenAPI document", () => {
 
 describe("arkTypeSchemaConverter", () => {
   it("leaves schemas from other libraries to Nest", () => {
-    const notArkType = { "~standard": { vendor: "zod", version: 1, validate: () => ({ value: null }) } };
+    const notArkType = {
+      "~standard": { vendor: "zod", version: 1, validate: () => ({ value: null }) },
+    };
 
     expect(arkTypeSchemaConverter(notArkType, { schemaType: "input" })).toBeUndefined();
   });

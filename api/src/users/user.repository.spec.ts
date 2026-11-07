@@ -8,7 +8,12 @@ import type { SignUpSchemaDto } from "../auth/schema/sign-up.schema.js";
 import { UsersRepository } from "./users.repository.js";
 
 const newUser = (overrides: Partial<SignUpSchemaDto> = {}) =>
-  ({ username: "jose", email: "jose@example.com", password: "hashed", ...overrides }) as SignUpSchemaDto;
+  ({
+    username: "jose",
+    email: "jose@example.com",
+    password: "hashed",
+    ...overrides,
+  }) as SignUpSchemaDto;
 
 describe("UsersRepository", () => {
   let testDb: Awaited<ReturnType<typeof createTestDb>>;
@@ -36,7 +41,9 @@ describe("UsersRepository", () => {
 
   it("create reject username", async () => {
     await repo.create(newUser());
-    await expect(repo.create(newUser({ email: "otro@example.com" }))).rejects.toThrow(ConflictException);
+    await expect(repo.create(newUser({ email: "otro@example.com" }))).rejects.toThrow(
+      ConflictException,
+    );
   });
 
   it("create reject email", async () => {

@@ -91,4 +91,3 @@ export class AuthController {
     return { mfaRequired: session.mfa === "pending" };
   }
 }
-

@@ -52,7 +52,9 @@ describe("signUpSchema", () => {
   });
 
   it("rejects a password shorter than 12 characters", () => {
-    expect(problemsOf(signUpSchema({ ...validSignUp, password: "Sh0rt!" }))).toHaveProperty("password");
+    expect(problemsOf(signUpSchema({ ...validSignUp, password: "Sh0rt!" }))).toHaveProperty(
+      "password",
+    );
   });
 
   it("rejects a password that is easy to guess, without echoing it", () => {
@@ -65,9 +67,16 @@ describe("signUpSchema", () => {
   });
 
   it("documents the password as a write-only field", () => {
-    const { properties } = toOpenApiSchema(signUpSchema, "input") as { properties: Record<string, object> };
+    const { properties } = toOpenApiSchema(signUpSchema, "input") as {
+      properties: Record<string, object>;
+    };
 
-    expect(properties.password).toMatchObject({ format: "password", writeOnly: true, minLength: 12, maxLength: 128 });
+    expect(properties.password).toMatchObject({
+      format: "password",
+      writeOnly: true,
+      minLength: 12,
+      maxLength: 128,
+    });
   });
 });
 
@@ -91,7 +100,9 @@ describe("signInSchema", () => {
 
 describe("signInResultSchema", () => {
   it("documents mfaRequired", () => {
-    const { properties } = toOpenApiSchema(signInResultSchema, "output") as { properties: Record<string, object> };
+    const { properties } = toOpenApiSchema(signInResultSchema, "output") as {
+      properties: Record<string, object>;
+    };
 
     expect(properties.mfaRequired).toMatchObject({ type: "boolean" });
   });

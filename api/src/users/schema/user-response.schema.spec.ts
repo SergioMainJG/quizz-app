@@ -22,10 +22,16 @@ describe("userResponseSchema", () => {
   });
 
   it("documents ids and timestamps as read-only and dates as date-time strings", () => {
-    const { properties } = toOpenApiSchema(userResponseSchema, "output") as { properties: Record<string, object> };
+    const { properties } = toOpenApiSchema(userResponseSchema, "output") as {
+      properties: Record<string, object>;
+    };
 
     expect(properties).not.toHaveProperty("password");
     expect(properties.id).toMatchObject({ readOnly: true });
-    expect(properties.createdAt).toMatchObject({ type: "string", format: "date-time", readOnly: true });
+    expect(properties.createdAt).toMatchObject({
+      type: "string",
+      format: "date-time",
+      readOnly: true,
+    });
   });
 });

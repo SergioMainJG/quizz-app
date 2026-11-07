@@ -73,7 +73,7 @@ export class UsersRepository {
     return null;
   }
 
-  async updatePasswordHash(id: string, password: string): Promise<undefined>{
-    await this.db.update(users).set({password: password}).where(eq(users.id, id));
+  async updatePasswordHash(id: string, password: string): Promise<undefined> {
+    await this.db.update(users).set({ password: password }).where(eq(users.id, id));
   }
 }

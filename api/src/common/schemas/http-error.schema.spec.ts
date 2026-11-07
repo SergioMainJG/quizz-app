@@ -1,7 +1,7 @@
 import { BadRequestException, StandardSchemaValidationPipe } from "@nestjs/common";
 import { type } from "arktype";
 import { describe, expect, it } from "vitest";
-import { validationErrorSchema, validationExceptionFactory } from "./http-error.schema.js";
+import { validationErrorDetailsSchema, validationExceptionFactory } from "./http-error.schema.js";
 
 const bodySchema = type({ email: "string.email", age: "number >= 18" });
 
@@ -31,9 +31,9 @@ describe("validationExceptionFactory", () => {
     });
   });
 
-  it("produces a body that matches the documented schema", async () => {
+  it("produces the details the documented ValidationError is built from", async () => {
     const error = (await validate({})) as BadRequestException;
 
-    expect(validationErrorSchema(error.getResponse())).not.toBeInstanceOf(type.errors);
+    expect(validationErrorDetailsSchema(error.getResponse())).not.toBeInstanceOf(type.errors);
   });
 });

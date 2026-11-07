@@ -11,7 +11,7 @@ export class CredentialsService {
     private readonly passwordHasher: PasswordHasher,
   ) {}
 
-  async register({email, password, username}: SignUpSchemaDto): Promise<User> {
+  async register({ email, password, username }: SignUpSchemaDto): Promise<User> {
     if (await this.usersRepository.findByEmail(email)) {
       throw new ConflictException("Email already registered");
     }
@@ -22,7 +22,7 @@ export class CredentialsService {
     });
   }
 
-  async verify({email, password}: SignInSchemaDto): Promise<User | null> {
+  async verify({ email, password }: SignInSchemaDto): Promise<User | null> {
     const found = await this.usersRepository.findByEmail(email);
 
     const valid = await this.passwordHasher.verify(password, found?.password);

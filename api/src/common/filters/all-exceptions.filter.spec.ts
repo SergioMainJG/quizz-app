@@ -1,6 +1,11 @@
 import type { ArgumentsHost } from "@nestjs/common";
 
-import { BadRequestException, Logger, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from "@nestjs/common";
 
 import { AllExceptionsFilter } from "./all-exceptions.filter.js";
 
@@ -49,6 +54,60 @@ describe("AllExceptionsFilter", () => {
       correlationId: "abc",
       message: ["email must be an email"],
     });
+  });
+
+  it("keeps the field errors of a validation failure", () => {
+    const { filter, host, reply } = createHost({ id: "req-1" });
+    const errors = [{ field: "email", message: 'must be an email address (was "asf")' }];
+
+    filter.catch(
+      new BadRequestException({
+        statusCode: 400,
+        error: "Bad Request",
+        message: "Validation failed",
+        errors,
+      }),
+      host,
+    );
+
+    expect(reply.mock.calls[0]?.[1]).toMatchObject({
+      error: "Bad Request",
+      message: "Validation failed",
+      errors,
+      statusCode: 400,
+    });
+  });
+
+  it("never lets an exception override the envelope", () => {
+    const { filter, host, reply } = createHost({ id: "req-1" });
+
+    filter.catch(
+      new BadRequestException({
+        message: "Nope",
+        statusCode: 200,
+        path: "/elsewhere",
+        correlationId: "forged",
+      }),
+      host,
+    );
+
+    expect(reply.mock.calls[0]?.[1]).toMatchObject({
+      statusCode: 400,
+      path: "/orders/1",
+      correlationId: "req-1",
+    });
+    expect(reply.mock.calls[0]?.[2]).toBe(400);
+  });
+
+  it("leaves the extra fields of server errors out of the response", () => {
+    const { filter, host, reply } = createHost({});
+
+    filter.catch(
+      new InternalServerErrorException({ message: "Query failed", query: "SELECT * FROM users" }),
+      host,
+    );
+
+    expect(reply.mock.calls[0]?.[1]).not.toHaveProperty("query");
   });
 
   it("hides the details of unexpected errors", () => {
