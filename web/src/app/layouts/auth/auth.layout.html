@@ -1,0 +1,10 @@
+<div class="grid min-h-dvh bg-zinc-100 lg:grid-cols-3">
+  <main class="z-10 col-start-1 row-start-1 flex items-center justify-center p-4">
+    <div class="w-full max-w-sm rounded-box lg:shadow-none lg:backdrop-blur-none">
+      <ng-content />
+    </div>
+  </main>
+  <aside class="relative col-start-1 row-start-1 lg:col-start-2 lg:col-end-4" aria-hidden="true">
+    <app-image [imgSrc]="background()" [altImg]="alt()" [isBackground]="true" [isPriority]="true" />
+  </aside>
+</div>
