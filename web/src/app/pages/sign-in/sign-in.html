@@ -1,0 +1,49 @@
+<auth-layout [background]="backgroundSrc" [alt]="alt">
+  <fieldset class="shadow-lg backdrop-blur-xl card flex justify-center p-6 lg:fieldset lg:bg-base-200/5 lg:border-base-300 lg:rounded-box lg:border lg:p-4 ">
+    <legend class="text-xl lg:fieldset-legend lg:text-xl lg:text-zinc-950 lg:font-normal">Sign In</legend>
+    <form [formRoot]="signInForm" class="size-full flex flex-col">
+      <mat-form-field [hintLabel]="hintEmail()" class="my-2">
+        <mat-label class="w-full text-sm">Email:</mat-label>
+        <input class="field-sizing-content" type="email" matInput [formField]="signInForm.email"
+          placeholder="Ex. john-doe1932@example.com" />
+        @if (signInForm.email().invalid()
+        && signInForm.email().dirty()
+        && signInForm.email().touched()) {
+        <mat-hint class="truncate text-red-500 bg-zinc-400 rounded-lg" [classList]="" align="end">
+          {{ signInForm.email().errors().map((err) => `${err.message}, \n`)}}
+        </mat-hint>
+        }
+      </mat-form-field>
+
+      <mat-form-field [hintLabel]="hintPassword()" class="my-2">
+        <mat-label class="w-full text-sm">Password:</mat-label>
+        <input class="field-sizing-content" type="password" matInput [formField]="signInForm.password" placeholder="*********************" />
+        @if (signInForm.password().invalid()
+        && signInForm.password().dirty()
+        && signInForm.password().touched()
+        ) {
+        <mat-hint class="truncate text-red-500 bg-zinc-400 rounded-lg" align="end">
+          {{ signInForm.password().errors().map((err) => `${err.message}, \n`)}}
+        </mat-hint>
+        }
+      </mat-form-field>
+      <button type="submit" matButton="elevated"
+        [disabled]="signInForm.email().invalid() || signInForm.password().invalid()"
+        [disabledInteractive]="signInForm.email().invalid() || signInForm.password().invalid()"
+        [matTooltip]=" signInForm.email().invalid() || signInForm.password().invalid() ? 'Complete successfully the register form':'' ">
+        {{ signInForm.email().invalid() || signInForm.password().invalid() ? 'Not yet, buddy' : 'Sent'}}</button>
+    </form>
+  </fieldset>
+  <aside class="mt-4 flex flex-col justify-center gap-2">
+    <h2 class="text-sm text-end">
+      <a class="btn btn-secondary link link-secondary link-hover text-pink-700" routerLink="/auth/sign-up">
+        Don't have an account? Sign up.
+      </a>
+    </h2>
+    <h3 class="text-sm text-end">
+      <a class="btn btn-accent link link-accent link-hover text-cyan-700" routerLink="/">
+        Return to home.
+      </a>
+    </h3>
+  </aside>
+</auth-layout>
