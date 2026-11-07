@@ -6,6 +6,8 @@ import {
   writeResponseToNodeResponse,
 } from "@angular/ssr/node";
 import express from "express";
+import { createProxyMiddleware } from "http-proxy-middleware";
+import { environment } from "./environments/environment";
 
 const browserDistFolder = join(import.meta.dirname, "../browser");
 
@@ -44,6 +46,13 @@ app.use((req, res, next) => {
     .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
     .catch(next);
 });
+
+app.use(
+  createProxyMiddleware({
+    target: environment.backendUrl,
+    pathFilter: '/api',
+  }),
+)
 
 /**
  * Start the server if this module is the main entry point, or it is ran via PM2.
