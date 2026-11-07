@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm",
+    "packageManager": "bun",
     "analytics": false
   },
   "newProjectRoot": "projects",
@@ -11,9 +11,11 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "inlineTemplate": true,
-          "inlineStyle": true,
-          "skipTests": true
+          "inlineTemplate": false,
+          "inlineStyle": false,
+          "skipTests": false,
+          "exportDefault": true,
+          "style": "none"
         },
         "@schematics/angular:class": {
           "skipTests": true
@@ -52,10 +54,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/material-theme.scss",
-              "src/styles.css"
-            ],
+            "styles": ["src/material-theme.scss", "src/styles.css"],
             "server": "src/main.server.ts",
             "outputMode": "server",
             "security": {
@@ -107,6 +106,12 @@
             }
           },
           "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "coverageReporters": ["html", "lcov", "text-summary"]
+          }
         }
       }
     }

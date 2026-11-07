@@ -3,5 +3,13 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports.biome": "explicit",
     "source.fixAll.biome": "explicit"
-  }
+  },
+  // allow autocomplete for ArkType expressions like "string | num"
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  // prioritize ArkType's "type" for autoimports
+  "js/ts.preferences.autoImportSpecifierExcludeRegexes": [
+    "^(node:)?os$"
+  ],
 }
