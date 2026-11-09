@@ -1,12 +1,12 @@
-import type { Envs } from "./config/envs.schema.js";
-import type { ConfigService } from "@nestjs/config";
-import type { NestBunApplication } from "nestjs-platform-bun";
-
 import { StandardSchemaValidationPipe } from "@nestjs/common";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import type { ConfigService } from "@nestjs/config";
 import { apiReference } from "@scalar/nestjs-api-reference";
+import type { NestBunApplication } from "nestjs-platform-bun";
 import { BunAdapter } from "nestjs-platform-bun";
 import { BunIoAdapter } from "nestjs-platform-bun/socket.io";
+import { validationExceptionFactory } from "./common/schemas/http-error.schema.js";
+import type { Envs } from "./config/envs.schema.js";
+import { createOpenApiDocument } from "./config/openapi/openapi.js";
 
 /** nestjs-platform-bun is a third-party adapter, not maintained by the NestJS team. */
 export const createAdapter = (): BunAdapter => new BunAdapter();
@@ -16,20 +16,18 @@ export const configureApplication = (
   app: NestBunApplication,
   config: ConfigService<Envs, true>,
 ): void => {
-  app.useGlobalPipes(new StandardSchemaValidationPipe());
+  app.setGlobalPrefix("api");
+  app.useGlobalPipes(
+    new StandardSchemaValidationPipe({ exceptionFactory: validationExceptionFactory }),
+  );
   app.enableCors({
     credentials: false,
     methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE"],
     origin: config.get("DOMAIN_ORIGIN", { infer: true }),
   });
-  const document = SwaggerModule.createDocument(
-    app,
-    new DocumentBuilder()
-      .setTitle(`${config.get("APP_NAME", { infer: true })} API`)
-      .setVersion("1.0")
-      .addBearerAuth()
-      .build(),
-  );
+
+  const document = createOpenApiDocument(app, config.get("APP_NAME", { infer: true }));
   app.use("/reference", apiReference({ content: document }));
+  app.useSecurityHeaders();
   app.useWebSocketAdapter(new BunIoAdapter(app));
 };

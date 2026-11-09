@@ -1,0 +1,29 @@
+<fieldset
+  class="shadow-lg backdrop-blur-xl card flex justify-center p-6 lg:fieldset lg:bg-base-200/5 lg:border-base-300 lg:rounded-box lg:border lg:p-4 ">
+  <legend class="text-xl lg:fieldset-legend lg:text-xl lg:text-zinc-950 lg:font-normal">Sign Up</legend>
+  <form [formRoot]="signUpForm" class="size-full flex flex-col">
+    <form-fields [formField]="signUpForm.username" [hint]="hintUsername()" label="Username:" autocomplete="off"
+      placeholder="wiseOwl0003" type="text" />
+    <form-fields [formField]="signUpForm.email" [hint]="hintEmail()" label="Email:" autocomplete="off"
+      placeholder="Ex. john-doe1932@example.com" type="email" />
+    <form-fields [formField]="signUpForm.password" [hint]="hintPassword()" label="Password'" type="password"
+      placeholder="************" autocomplete="off" />
+    @for (error of signUpForm().errors(); track $index) {
+    <p class="my-2 text-sm text-error" role="alert">{{error.message}}</p>
+    }
+    <submit-button [isFormValid]="isFormValid()" suggestAboutForm="Complete successfully the register formulary."
+      invalidMessage="We're excited to make you part of our community!" validMessage="Sign Up!" />
+  </form>
+</fieldset>
+<aside class="mt-4 flex flex-col justify-center gap-2">
+  <h2 class="text-sm text-end">
+    <a class="btn btn-secondary link link-secondary link-hover text-pink-700" routerLink="/auth/sign-in">
+      Already have an account? Sign in here.
+    </a>
+  </h2>
+  <h3 class="text-sm text-end">
+    <a class="btn btn-accent link link-accent link-hover text-cyan-700" routerLink="/">
+      Return to home.
+    </a>
+  </h3>
+</aside>
