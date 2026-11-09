@@ -1,25 +1,19 @@
 import { Component, computed, injectAsync, onIdle, signal } from "@angular/core";
 import { FormField, FormRoot, form, validateStandardSchema } from "@angular/forms/signals";
-import { MatButton } from "@angular/material/button";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
-import { MatTooltip } from "@angular/material/tooltip";
 import { RouterLink } from "@angular/router";
 import { firstValueFrom } from "rxjs";
+import Fields from "../../components/form/fields/fields";
+import SubmitButton from "../../components/form/submit-button/submit-button";
 import { toFormErrors } from "../../helpers/forms/to-form-errors";
-import AuthLayout from "../../layouts/auth/auth.layout";
 import { SignUpRequest, signUpRequestSchema } from "../../schemas/auth/sign-up-req.schema";
 
 @Component({
   imports: [
     FormField,
     FormRoot,
-    MatFormFieldModule,
-    MatInputModule,
-    AuthLayout,
-    MatButton,
-    MatTooltip,
     RouterLink,
+    SubmitButton,
+    Fields,
   ],
   selector: "sign-up",
   templateUrl: "./sign-up.html",
@@ -56,8 +50,6 @@ export default class SignUp {
       },
     },
   );
-  protected readonly backgroundSrc = "/images/sign-up.avif";
-  protected readonly alt = "Sign In Image";
 
   protected readonly hintEmail = computed(() => {
     if (this.signUpForm.email().dirty() && !this.signUpForm.email().touched())
@@ -76,4 +68,6 @@ export default class SignUp {
       return "More than 11 characters.";
     return "";
   });
+
+  protected readonly isFormValid = computed(() => this.signUpForm().valid());
 }

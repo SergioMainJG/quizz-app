@@ -1,3 +1,72 @@
-<ul>
-  <li> <a routerLink="/auth/sign-in">Sign Up</a> </li>
-</ul>
+<header class="grid bg-neutral text-white">
+  <app-image class="col-start-1 row-start-1 size-full" imgSrc="/images/homepage.avif" altImg="" [isPriority]="true" />
+  <div class="relative col-start-1 row-start-1 bg-linear-to-r from-black/85 via-black/60 to-black/10"
+    aria-hidden="true"></div>
+
+  <div class="z-10 col-start-1 row-start-1 flex min-h-152 flex-col lg:min-h-176">
+    <nav class="navbar mx-auto w-full max-w-6xl gap-2 px-4 lg:px-6">
+      <a class="flex-1" routerLink="/">
+        <span class="sr-only">Quizz Party home</span>
+        <app-image class="size-12" fit="contain" imgSrc="/icons/icon-96x96.png" altImg="" />
+      </a>
+      <ul class="menu menu-horizontal gap-2 p-0">
+        <li>
+          <a class="btn btn-ghost btn-sm text-white hover:bg-white/15 sm:btn-md" routerLink="/auth/sign-in">
+            Sign In
+          </a>
+        </li>
+        <li>
+          <a class="btn btn-secondary btn-sm sm:btn-md" routerLink="/auth/sign-up">Sign Up</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center gap-6 px-4 pt-8 pb-32 lg:px-6 lg:pb-40">
+      <h1 class="max-w-2xl text-4xl leading-tight font-light tracking-tight md:text-6xl">
+        Quizz Party challenges you to prove yourself!
+      </h1>
+      <p class="max-w-xl text-lg text-white/90 md:text-xl">
+        Choose any quiz to show your knowledge. Understanding what you don't know, it's the best way of
+        being a good ignorant.
+      </p>
+
+      <div class="mt-4 flex flex-col gap-6 sm:flex-row sm:items-end">
+        <div class="flex flex-col gap-3">
+          <p class="text-xs font-semibold tracking-widest uppercase">New here?</p>
+          <a class="btn btn-secondary btn-lg rounded-full px-10" routerLink="/auth/sign-up">Create your account</a>
+        </div>
+        <div class="divider divider-horizontal mx-2 hidden before:bg-white/40 after:bg-white/40 sm:flex"></div>
+        <div class="flex flex-col gap-3">
+          <p class="text-xs font-semibold tracking-widest uppercase">Already playing?</p>
+          <a class="btn btn-outline btn-lg rounded-full border-white px-10 text-white hover:bg-white hover:text-zinc-900"
+            routerLink="/auth/sign-in">
+            Sign in
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- The card floats over the bottom of the hero, like a search bar would. -->
+<main class="relative z-10 mx-auto -mt-20 w-full max-w-6xl px-4 pb-16 lg:-mt-24 lg:px-6">
+  <figure class="card bg-base-100 shadow-xl">
+    <div class="card-body gap-4 p-6 md:p-10">
+      <blockquote class="border-l-4 border-secondary pl-4 text-lg text-zinc-700 italic md:pl-6 md:text-xl"
+        cite="https://www.cambridge.org/core/books/abs/descartes-meditations/that-nothing-is-known/8B93EBA6CB2E5249490ADD199A1370B9">
+        <p>
+          This one fact, that I know nothing — even this I do not know. But I conjecture that neither I nor
+          anyone else knows anything. Let this proposition be the banner under which I march; this is the flag
+          I must follow. Nothing is known.
+        </p>
+      </blockquote>
+      <figcaption class="text-sm text-zinc-500 md:pl-6">
+        Francisco Sánchez, <cite>That Nothing is Known (Quod nihil scitur)</cite>, 1581.
+      </figcaption>
+    </div>
+  </figure>
+</main>
+
+<footer class="footer footer-center p-8 text-sm text-zinc-500">
+  <p>© {{ year }} Quizz Party</p>
+</footer>
