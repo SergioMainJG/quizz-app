@@ -1,0 +1,20 @@
+@let field = formField();
+@let state = field();
+
+<mat-form-field class="my-2 w-full">
+  <mat-label class="w-full text-sm">{{ label() }}</mat-label>
+  <input
+    matInput
+    class="field-sizing-content"
+    [type]="type()"
+    [placeholder]="placeholder()"
+    [attr.autocomplete]="autocomplete() || null"
+    [formField]="field"
+  />
+  @if (hint()) {
+    <mat-hint>{{ hint() }}</mat-hint>
+  }
+  @for (error of state.errors(); track $index) {
+    <mat-error>{{ error.message }}</mat-error>
+  }
+</mat-form-field>

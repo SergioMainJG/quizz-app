@@ -2,6 +2,8 @@
   [ngSrc]="imgSrc()"
   [alt]="altImg()"
   [priority]="isPriority()"
-  class="object-cover"
+  [sizes]="sizes()"
+  [class.object-cover]="fit() === 'cover'"
+  [class.object-contain]="fit() === 'contain'"
   fill
 />

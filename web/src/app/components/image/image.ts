@@ -5,10 +5,12 @@ import { Component, input } from '@angular/core';
   imports: [NgOptimizedImage],
   selector: 'app-image',
   templateUrl: './image.html',
+  host: { class: 'relative block overflow-hidden' }
 })
 export default class Image {
   readonly imgSrc       = input.required<string>();
   readonly altImg       = input.required<string>();
-  readonly isBackground = input<boolean>(false); 
   readonly isPriority   = input<boolean>(false)
+  readonly fit          = input<"cover"|"contain">("cover");
+  readonly sizes        = input("100vw");
 }
