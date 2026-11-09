@@ -4,6 +4,7 @@ import type { DrizzleModuleFactoryOptions, DrizzleOptionsFactory } from "@nestjs
 import { drizzle } from "drizzle-orm/bun-sql/postgres";
 
 import type { Envs } from "../envs.schema.js";
+import { relations } from "./schemas/relations.js";
 
 @Injectable()
 export class DrizzleConfigService implements DrizzleOptionsFactory {
@@ -14,6 +15,7 @@ export class DrizzleConfigService implements DrizzleOptionsFactory {
       connection: this.configService.get("DATABASE_URL", { infer: true }),
       drizzle: drizzle,
       autoCloseConnection: true,
+      relations,
     };
   }
 }

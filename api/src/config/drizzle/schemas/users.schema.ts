@@ -29,3 +29,4 @@ export const [usersSelectSchema, usersInsertSchema, usersUpdateSchema] = [
 export type UsersSelectSchema = typeof usersSelectSchema.infer;
 export type UsersInsertSchema = typeof usersInsertSchema.infer;
 export type UsersUpdateSchema = typeof usersUpdateSchema.infer;
+
