@@ -12,4 +12,7 @@
   "js/ts.preferences.autoImportSpecifierExcludeRegexes": [
     "^(node:)?os$"
   ],
+  "cSpell.words": [
+    "prefersdark"
+  ],
 }

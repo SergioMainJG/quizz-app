@@ -5,7 +5,7 @@ import {
   withEventReplay,
   withHttpTransferCacheOptions,
 } from "@angular/platform-browser";
-import { provideRouter, withViewTransitions } from "@angular/router";
+import { provideRouter, withComponentInputBinding, withViewTransitions } from "@angular/router";
 import { provideServiceWorker } from "@angular/service-worker";
 import { routes } from "../routes/app.routes";
 
@@ -21,6 +21,7 @@ export const appConfig: ApplicationConfig = {
           }
         },
       }),
+      withComponentInputBinding(),
     ),
     provideClientHydration(
       withEventReplay(),
